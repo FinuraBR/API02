@@ -35,33 +35,33 @@ public class VeiculoService {
         return converterParaResponse(veiculo);
     }
 
-    public VeiculoResponseDTO cadastrar(VeiculoRequestDTO dto) {
-        Cliente cliente = clienteRepository.findById(dto.clienteId())
-        //TODO: adicionar a exception
+    public VeiculoResponseDTO cadastrar(VeiculoRequestDTO dto, Long ClienteId) {
+        Cliente cliente = clienteRepository.findById(ClienteId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não cadastrado"));
 
         Veiculo veiculo = new Veiculo();
 
         veiculo.setPlaca(dto.placa());
         veiculo.setModelo(dto.modelo());
         veiculo.setAno(dto.ano());
-        veiculo.setCliente(cliente);
+        veiculo.setClienteId(dto.clienteId());
 
         Veiculo salvo = veiculoRepository.save(veiculo);
 
         return converterParaResponse(salvo);
     }
 
-    public VeiculoResponseDTO atualizar(Long idVeiculo, VeiculoRequestDTO dto) {
+    public VeiculoResponseDTO atualizar(VeiculoRequestDTO dto, Long idVeiculo) {
         Veiculo veiculo = veiculoRepository.findById(idVeiculo)
-        //TODO: adicionar a exception
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Veiculo não encontrado"));
 
         Cliente cliente = clienteRepository.findById(dto.clienteId())
-        //TODO: adicionar a exception
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado"));
 
         veiculo.setPlaca(dto.placa());
         veiculo.setModelo(dto.modelo());
         veiculo.setAno(dto.ano());
-        veiculo.setCliente(cliente);
+        veiculo.setClienteId(dto.clienteId());
 
         Veiculo atualizado = veiculoRepository.save(veiculo);
 
@@ -70,7 +70,7 @@ public class VeiculoService {
 
     public void deletar(Long idVeiculo) {
         Veiculo veiculo = veiculoRepository.findById(idVeiculo)
-        //TODO: adicionar a exception
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado"));
 
         //TODO: chamar método de deletar do repository
     }
@@ -83,7 +83,7 @@ public class VeiculoService {
     }
 
     public List<VeiculoResponseDTO> listarPorCliente(Long idCliente) {
-        return veiculoRepository.findByClienteIdCliente(idCliente)
+        return veiculoRepository.findByClienteIdCliente(String.valueOf(idCliente))
                 .stream()
                 .map(this::converterParaResponse)
                 .toList();
@@ -91,8 +91,15 @@ public class VeiculoService {
 
     private VeiculoResponseDTO converterParaResponse(Veiculo veiculo) {
         return new VeiculoResponseDTO(
-                //TODO: fazer os gets de "veiculo" conforme o que deve aparecer no response
 
+                veiculo.getIdVeiculo(),
+                veiculo.getPlaca(),
+                veiculo.getModelo(),
+                veiculo.getAno(),
+                veiculo.getClienteId(),
+                veiculo.getNome(),
+                veiculo.getTelefone(),
+                veiculo.getEmail()
         );
     }
 }

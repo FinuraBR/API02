@@ -1,5 +1,6 @@
 package org.example.oficina.exception;
 
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,7 +13,10 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    //TODO: implementar a exception do "RecursoNaoEncontrado" e mudar nos services
+    @ExceptionHandler(ChangeSetPersister.NotFoundException.class)
+    public ResponseEntity<String> handleNotFoundException(ChangeSetPersister.NotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> tratarRuntime(RuntimeException ex) {

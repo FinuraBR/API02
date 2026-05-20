@@ -1,5 +1,8 @@
 package org.example.oficina.model;
 
+import jakarta.persistence.Entity;
+
+@Entity
 public class OrdemServico {
 
     private Long idOrdemServico;
@@ -9,7 +12,5 @@ public class OrdemServico {
     private String status;
 
     private Double valorServico;
-
-    //TODO: transformar em entidade e colocar relacionamento
 
 }

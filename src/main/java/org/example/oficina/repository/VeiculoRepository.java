@@ -1,9 +1,16 @@
 package org.example.oficina.repository;
 
-public interface VeiculoRepository {
+import org.example.oficina.model.Veiculo;
+import org.jspecify.annotations.NonNull;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-    // TODO: criar método para filtrar veículos pela placa.
+import java.util.List;
 
-    //TODO: criar método para listar veículos de um determinado cliente.
+public interface VeiculoRepository extends JpaRepository<Veiculo,Long> {
+    Veiculo save(@NonNull Veiculo veiculo);
+
+    List<Veiculo> findByPlacaContainingIgnoreCase(String placa);
+
+    List<Veiculo> findByClienteIdCliente(String cliente);
 
 }

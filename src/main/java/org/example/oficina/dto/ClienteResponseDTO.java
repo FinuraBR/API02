@@ -1,8 +1,7 @@
 package org.example.oficina.dto;
 
-public class ClienteResponseDTO (
-
-        //TODO: colocar dados trazidos no response
-
-){
-}
+public record ClienteResponseDTO (
+        String nome,
+        String telefone,
+        String email
+){}
